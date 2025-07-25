@@ -30,10 +30,10 @@ export const BottomNavigation = ({ activeTab, onTabChange }: BottomNavigationPro
               size="icon"
               className={`flex flex-col items-center gap-1 h-12 w-16 ${
                 isCreate 
-                  ? 'bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90' 
+                  ? 'bg-gradient-to-r from-nigerian-green to-ureal-gold hover:from-nigerian-green/90 hover:to-ureal-gold/90 shadow-warm' 
                   : isActive 
-                    ? 'text-foreground' 
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'text-nigerian-green' 
+                    : 'text-muted-foreground hover:text-nigerian-green'
               }`}
               onClick={() => onTabChange(tab.id)}
             >

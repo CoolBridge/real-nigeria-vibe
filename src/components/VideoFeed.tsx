@@ -1,56 +1,59 @@
 import { useState, useEffect } from 'react';
 import { VideoPlayer } from './VideoPlayer';
+import nigerianCreator1 from '@/assets/nigerian-creator-1.jpg';
+import nigerianCreator2 from '@/assets/nigerian-creator-2.jpg';
+import nigerianCreator3 from '@/assets/nigerian-creator-3.jpg';
 
-// Mock data for videos
+// Mock data for videos with Nigerian creators
 const mockVideos = [
   {
     id: '1',
     url: '/placeholder-video.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=600&fit=crop',
-    title: 'Amazing Nigerian dance moves! 🇳🇬 #NigerianTikTok #Dance #Afrobeats',
+    thumbnail: nigerianCreator1,
+    title: 'Afrobeats dance challenge! 🇳🇬 Who can do it better? #AfrobeatsDance #NaijaVibes #UralChallenge',
     user: {
-      username: 'naija_dancer',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b639?w=100&h=100&fit=crop&crop=face',
+      username: 'kemi_moves',
+      avatar: nigerianCreator1,
       isFollowing: false,
     },
     stats: {
-      likes: 1240,
-      comments: 89,
-      shares: 23,
+      likes: 12400,
+      comments: 389,
+      shares: 156,
     },
     isLiked: false,
   },
   {
     id: '2',
     url: '/placeholder-video.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=600&fit=crop',
-    title: 'Cooking traditional Nigerian jollof rice 🍚 Follow for more recipes!',
+    thumbnail: nigerianCreator2,
+    title: 'Traditional Nigerian Jollof Rice recipe! 🍚 Lagos style vs Abuja style 🔥 #JollofWars #NigerianFood',
     user: {
-      username: 'chef_amaka',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face',
+      username: 'chef_funmi',
+      avatar: nigerianCreator2,
       isFollowing: true,
     },
     stats: {
-      likes: 2350,
-      comments: 156,
-      shares: 78,
+      likes: 8750,
+      comments: 267,
+      shares: 89,
     },
     isLiked: true,
   },
   {
     id: '3',
     url: '/placeholder-video.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1542359649-31e03cd4d909?w=400&h=600&fit=crop',
-    title: 'Lagos street fashion is unmatched! 🔥 #LagosFashion #NigerianStyle',
+    thumbnail: nigerianCreator3,
+    title: 'Lagos street style meets Ankara fashion 🔥 Nigerian drip is unmatched! #AnkaraFashion #LagosFashion #NaijaStyle',
     user: {
-      username: 'lagos_fashionista',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
+      username: 'eko_stylist',
+      avatar: nigerianCreator3,
       isFollowing: false,
     },
     stats: {
-      likes: 890,
-      comments: 45,
-      shares: 12,
+      likes: 5690,
+      comments: 178,
+      shares: 45,
     },
     isLiked: false,
   },

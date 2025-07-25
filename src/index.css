@@ -38,19 +38,24 @@ All colors MUST be HSL. */
     --input: 0 0% 18%;
     --ring: 120 100% 25%;
 
-    /* Ureal-specific colors */
+    /* Ureal-specific Nigerian-inspired colors */
     --nigerian-green: 120 100% 25%;
     --nigerian-white: 0 0% 98%;
     --ureal-pink: 348 100% 65%;
     --ureal-blue: 220 100% 65%;
+    --ureal-gold: 45 100% 50%;
+    --ureal-orange: 25 100% 55%;
     --video-overlay: 0 0% 0%;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(120 100% 25%), hsl(348 100% 65%));
+    /* Enhanced gradients with Nigerian colors */
+    --gradient-primary: linear-gradient(135deg, hsl(120 100% 25%), hsl(45 100% 50%));
+    --gradient-hero: linear-gradient(135deg, hsl(120 100% 25%), hsl(348 100% 65%), hsl(45 100% 50%));
     --gradient-video: linear-gradient(180deg, transparent 0%, hsl(0 0% 0% / 0.7) 100%);
+    --gradient-afro: linear-gradient(45deg, hsl(25 100% 55%), hsl(45 100% 50%), hsl(120 100% 25%));
     
-    /* Shadows */
+    /* Enhanced shadows with cultural warmth */
     --shadow-glow: 0 0 30px hsl(120 100% 25% / 0.3);
+    --shadow-warm: 0 10px 40px -12px hsl(45 100% 50% / 0.4);
     --shadow-elegant: 0 10px 40px -12px hsl(0 0% 0% / 0.5);
 
     --radius: 0.5rem;

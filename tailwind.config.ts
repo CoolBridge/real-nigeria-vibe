@@ -52,11 +52,13 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				// Ureal-specific colors
+				// Ureal-specific Nigerian colors
 				'nigerian-green': 'hsl(var(--nigerian-green))',
 				'nigerian-white': 'hsl(var(--nigerian-white))',
 				'ureal-pink': 'hsl(var(--ureal-pink))',
 				'ureal-blue': 'hsl(var(--ureal-blue))',
+				'ureal-gold': 'hsl(var(--ureal-gold))',
+				'ureal-orange': 'hsl(var(--ureal-orange))',
 				'video-overlay': 'hsl(var(--video-overlay))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
