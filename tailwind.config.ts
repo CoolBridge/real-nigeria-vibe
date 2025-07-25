@@ -52,6 +52,12 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Ureal-specific colors
+				'nigerian-green': 'hsl(var(--nigerian-green))',
+				'nigerian-white': 'hsl(var(--nigerian-white))',
+				'ureal-pink': 'hsl(var(--ureal-pink))',
+				'ureal-blue': 'hsl(var(--ureal-blue))',
+				'video-overlay': 'hsl(var(--video-overlay))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +90,26 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'float-up': {
+					'0%': { transform: 'translateY(100%)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
+				},
+				'pulse-glow': {
+					'0%, 100%': { transform: 'scale(1)', filter: 'brightness(1)' },
+					'50%': { transform: 'scale(1.05)', filter: 'brightness(1.2)' }
+				},
+				'slide-in-right': {
+					'0%': { transform: 'translateX(100%)', opacity: '0' },
+					'100%': { transform: 'translateX(0)', opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float-up': 'float-up 0.6s ease-out',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'slide-in-right': 'slide-in-right 0.3s ease-out'
 			}
 		}
 	},
