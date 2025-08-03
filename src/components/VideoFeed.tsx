@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 import { VideoPlayer } from './VideoPlayer';
+import { useVideos } from '@/hooks/useVideos';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { UserPlus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import nigerianCreator1 from '@/assets/nigerian-creator-1.jpg';
 import nigerianCreator2 from '@/assets/nigerian-creator-2.jpg';
 import nigerianCreator3 from '@/assets/nigerian-creator-3.jpg';
@@ -60,9 +65,15 @@ const mockVideos = [
 ];
 
 export const VideoFeed = () => {
+  const { user } = useAuth();
+  const { videos, loading, toggleLike, toggleFollow } = useVideos();
+  const navigate = useNavigate();
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  
+  // Use real videos if available, otherwise fallback to mock data
+  const displayVideos = videos.length > 0 ? videos : mockVideos;
 
   // Handle swipe gestures
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -80,7 +91,7 @@ export const VideoFeed = () => {
     const isUpSwipe = distance > 50;
     const isDownSwipe = distance < -50;
 
-    if (isUpSwipe && currentVideoIndex < mockVideos.length - 1) {
+    if (isUpSwipe && currentVideoIndex < displayVideos.length - 1) {
       setCurrentVideoIndex(currentVideoIndex + 1);
     }
     
@@ -95,7 +106,7 @@ export const VideoFeed = () => {
       if (e.key === 'ArrowUp' && currentVideoIndex > 0) {
         setCurrentVideoIndex(currentVideoIndex - 1);
       }
-      if (e.key === 'ArrowDown' && currentVideoIndex < mockVideos.length - 1) {
+      if (e.key === 'ArrowDown' && currentVideoIndex < displayVideos.length - 1) {
         setCurrentVideoIndex(currentVideoIndex + 1);
       }
     };
@@ -103,6 +114,52 @@ export const VideoFeed = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentVideoIndex]);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-spin w-8 h-8 border-2 border-nigerian-green border-t-transparent rounded-full mx-auto"></div>
+          <p className="text-muted-foreground">Loading amazing Nigerian content...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="h-screen flex items-center justify-center p-4">
+        <div className="text-center space-y-6 max-w-md">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-nigerian-green to-ureal-gold bg-clip-text text-transparent">
+              Join the Ureal Community
+            </h2>
+            <p className="text-muted-foreground">
+              Sign up to discover amazing Nigerian creators and share your own story
+            </p>
+          </div>
+          <Button 
+            onClick={() => navigate('/auth')}
+            className="bg-gradient-to-r from-nigerian-green to-ureal-gold hover:from-nigerian-green/90 hover:to-ureal-gold/90 text-primary-foreground"
+          >
+            <UserPlus className="w-4 h-4 mr-2" />
+            Get Started
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (displayVideos.length === 0) {
+    return (
+      <div className="h-screen flex items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <h2 className="text-xl font-semibold">No videos yet</h2>
+          <p className="text-muted-foreground">Be the first to share your Nigerian story!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -117,11 +174,13 @@ export const VideoFeed = () => {
           transform: `translateY(-${currentVideoIndex * 100}vh)`,
         }}
       >
-        {mockVideos.map((video, index) => (
+        {displayVideos.map((video, index) => (
           <div key={video.id} className="h-screen w-full">
             <VideoPlayer 
               video={video} 
               isActive={index === currentVideoIndex}
+              onLike={() => toggleLike(video.id)}
+              onFollow={() => toggleFollow(video.user_id)}
             />
           </div>
         ))}
@@ -129,7 +188,7 @@ export const VideoFeed = () => {
 
       {/* Video indicators */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-        {mockVideos.map((_, index) => (
+        {displayVideos.map((_, index) => (
           <div
             key={index}
             className={`w-1 h-8 rounded-full transition-colors ${

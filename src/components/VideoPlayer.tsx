@@ -6,30 +6,52 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 interface VideoPlayerProps {
   video: {
     id: string;
-    url: string;
-    thumbnail: string;
     title: string;
-    user: {
+    video_url?: string;
+    url?: string;
+    thumbnail_url?: string;
+    thumbnail?: string;
+    user_id?: string;
+    profiles?: {
+      display_name?: string;
+      avatar_url?: string;
+    };
+    user?: {
       username: string;
       avatar: string;
       isFollowing: boolean;
     };
-    stats: {
+    likes_count?: number;
+    comments_count?: number;
+    shares_count?: number;
+    stats?: {
       likes: number;
       comments: number;
       shares: number;
     };
-    isLiked: boolean;
+    isLiked?: boolean;
+    isFollowing?: boolean;
   };
   isActive: boolean;
+  onLike?: () => void;
+  onFollow?: () => void;
 }
 
-export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
+export const VideoPlayer = ({ video, isActive, onLike, onFollow }: VideoPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [isLiked, setIsLiked] = useState(video.isLiked);
-  const [isFollowing, setIsFollowing] = useState(video.user.isFollowing);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Extract video data with fallbacks for both new and old format
+  const videoUrl = video.video_url || video.url || '';
+  const thumbnailUrl = video.thumbnail_url || video.thumbnail || '';
+  const displayName = video.profiles?.display_name || video.user?.username || 'Unknown User';
+  const avatarUrl = video.profiles?.avatar_url || video.user?.avatar || '';
+  const likesCount = video.likes_count ?? video.stats?.likes ?? 0;
+  const commentsCount = video.comments_count ?? video.stats?.comments ?? 0;
+  const sharesCount = video.shares_count ?? video.stats?.shares ?? 0;
+  const isLiked = video.isLiked ?? false;
+  const isFollowing = video.isFollowing ?? video.user?.isFollowing ?? false;
 
   useEffect(() => {
     if (videoRef.current) {
@@ -52,12 +74,12 @@ export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
     }
   };
 
-  const toggleLike = () => {
-    setIsLiked(!isLiked);
+  const handleLike = () => {
+    onLike?.();
   };
 
-  const toggleFollow = () => {
-    setIsFollowing(!isFollowing);
+  const handleFollow = () => {
+    onFollow?.();
   };
 
   return (
@@ -66,13 +88,13 @@ export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
       <video
         ref={videoRef}
         className="w-full h-full object-cover"
-        poster={video.thumbnail}
+        poster={thumbnailUrl}
         muted={isMuted}
         loop
         playsInline
         onClick={togglePlay}
       >
-        <source src={video.url} type="video/mp4" />
+        <source src={videoUrl} type="video/mp4" />
       </video>
 
       {/* Play/Pause Overlay */}
@@ -99,16 +121,16 @@ export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
           <div className="flex-1 mr-4">
             <div className="flex items-center gap-2 mb-2">
               <Avatar className="w-8 h-8 border-2 border-foreground">
-                <AvatarImage src={video.user.avatar} />
-                <AvatarFallback>{video.user.username[0].toUpperCase()}</AvatarFallback>
+                <AvatarImage src={avatarUrl} />
+                <AvatarFallback>{displayName[0]?.toUpperCase()}</AvatarFallback>
               </Avatar>
-              <span className="font-semibold text-sm">@{video.user.username}</span>
+              <span className="font-semibold text-sm">@{displayName}</span>
               {!isFollowing && (
                 <Button
                   variant="outline"
                   size="sm"
                   className="h-6 px-3 text-xs bg-transparent border-foreground text-foreground hover:bg-primary hover:border-primary"
-                  onClick={toggleFollow}
+                  onClick={handleFollow}
                 >
                   Follow
                 </Button>
@@ -122,15 +144,15 @@ export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
             {/* Follow Button */}
             <div className="relative">
               <Avatar className="w-12 h-12 border-2 border-foreground">
-                <AvatarImage src={video.user.avatar} />
-                <AvatarFallback>{video.user.username[0].toUpperCase()}</AvatarFallback>
+                <AvatarImage src={avatarUrl} />
+                <AvatarFallback>{displayName[0]?.toUpperCase()}</AvatarFallback>
               </Avatar>
               {!isFollowing && (
                 <Button
                   variant="default"
                   size="icon"
                   className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 bg-primary hover:bg-primary/90"
-                  onClick={toggleFollow}
+                  onClick={handleFollow}
                 >
                   <Plus className="w-3 h-3" />
                 </Button>
@@ -143,13 +165,13 @@ export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
                 variant="ghost"
                 size="icon"
                 className="w-12 h-12 hover:bg-background/20"
-                onClick={toggleLike}
+                onClick={handleLike}
               >
                 <Heart 
                   className={`w-7 h-7 ${isLiked ? 'fill-accent text-accent' : 'text-foreground'}`} 
                 />
               </Button>
-              <span className="text-xs text-foreground/80">{video.stats.likes}</span>
+              <span className="text-xs text-foreground/80">{likesCount}</span>
             </div>
 
             {/* Comment Button */}
@@ -161,7 +183,7 @@ export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
               >
                 <MessageCircle className="w-7 h-7 text-foreground" />
               </Button>
-              <span className="text-xs text-foreground/80">{video.stats.comments}</span>
+              <span className="text-xs text-foreground/80">{commentsCount}</span>
             </div>
 
             {/* Share Button */}
@@ -173,7 +195,7 @@ export const VideoPlayer = ({ video, isActive }: VideoPlayerProps) => {
               >
                 <Share className="w-7 h-7 text-foreground" />
               </Button>
-              <span className="text-xs text-foreground/80">{video.stats.shares}</span>
+              <span className="text-xs text-foreground/80">{sharesCount}</span>
             </div>
           </div>
         </div>

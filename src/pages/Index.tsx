@@ -1,11 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { VideoFeed } from '@/components/VideoFeed';
+import { VideoUpload } from '@/components/VideoUpload';
 import { BottomNavigation } from '@/components/BottomNavigation';
 import { Header } from '@/components/Header';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import nigerianHeroBg from '@/assets/nigerian-hero-bg.jpg';
 
 const Index = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
+
+  useEffect(() => {
+    if (!loading && !user && (activeTab === 'create' || activeTab === 'profile' || activeTab === 'inbox')) {
+      navigate('/auth');
+    }
+  }, [user, loading, activeTab, navigate]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -32,28 +43,15 @@ const Index = () => {
         );
       case 'create':
         return (
-          <div 
-            className="h-screen flex items-center justify-center relative"
-            style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url(${nigerianHeroBg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-          >
-            <div className="text-center animate-float-up">
-              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-ureal-gold to-nigerian-green bg-clip-text text-transparent">
-                Create Your Ureal
-              </h2>
-              <p className="text-nigerian-white mb-6">Share your Nigerian story with the world 🇳🇬</p>
-              <div className="text-sm text-nigerian-white/80 mb-4">
-                📱 Video recording and upload coming soon
+          <div className="h-screen pt-16 pb-16 bg-background overflow-y-auto">
+            <div className="container mx-auto px-4 py-8">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-ureal-gold to-nigerian-green bg-clip-text text-transparent">
+                  Create Your Ureal
+                </h2>
+                <p className="text-muted-foreground">Share your Nigerian story with the world 🇳🇬</p>
               </div>
-              <div className="flex flex-wrap justify-center gap-2 text-xs text-ureal-gold">
-                <span>#NaijaContent</span>
-                <span>#AfrobeatVibes</span>
-                <span>#LagosCulture</span>
-                <span>#NigerianCreators</span>
-              </div>
+              <VideoUpload />
             </div>
           </div>
         );

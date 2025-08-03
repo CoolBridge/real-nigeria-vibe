@@ -1,6 +1,9 @@
-import { Search, Menu } from 'lucide-react';
+import { Search, Menu, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 import urealLogo from '@/assets/ureal-logo.png';
 
 interface HeaderProps {
@@ -8,6 +11,26 @@ interface HeaderProps {
 }
 
 export const Header = ({ currentTab }: HeaderProps) => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "Come back soon! 👋",
+      });
+      navigate('/');
+    }
+  };
+
   const getTitle = () => {
     switch (currentTab) {
       case 'home':
@@ -72,6 +95,26 @@ export const Header = ({ currentTab }: HeaderProps) => {
           {currentTab === 'home' && (
             <Button variant="ghost" size="icon" className="w-8 h-8">
               <Search className="w-5 h-5" />
+            </Button>
+          )}
+          
+          {user ? (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="w-8 h-8"
+              onClick={handleSignOut}
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
+          ) : (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="w-8 h-8"
+              onClick={() => navigate('/auth')}
+            >
+              <User className="w-4 h-4" />
             </Button>
           )}
         </div>

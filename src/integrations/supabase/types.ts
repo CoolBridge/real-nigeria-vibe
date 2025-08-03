@@ -134,6 +134,78 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          likes_count: number | null
+          parent_comment_id: string | null
+          replies_count: number | null
+          updated_at: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          parent_comment_id?: string | null
+          replies_count?: number | null
+          updated_at?: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          parent_comment_id?: string | null
+          replies_count?: number | null
+          updated_at?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
       incidents: {
         Row: {
           anonymous_id: string
@@ -250,42 +322,54 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string | null
+          followers_count: number | null
+          following_count: number | null
           id: string
           location: string | null
           reputation_score: number | null
           role: string | null
+          total_likes: number | null
           total_rewards: number | null
           updated_at: string
           user_id: string
           verified_reports: number | null
+          videos_count: number | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          followers_count?: number | null
+          following_count?: number | null
           id?: string
           location?: string | null
           reputation_score?: number | null
           role?: string | null
+          total_likes?: number | null
           total_rewards?: number | null
           updated_at?: string
           user_id: string
           verified_reports?: number | null
+          videos_count?: number | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          followers_count?: number | null
+          following_count?: number | null
           id?: string
           location?: string | null
           reputation_score?: number | null
           role?: string | null
+          total_likes?: number | null
           total_rewards?: number | null
           updated_at?: string
           user_id?: string
           verified_reports?: number | null
+          videos_count?: number | null
         }
         Relationships: []
       }
@@ -538,6 +622,89 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
         ]
+      }
+      video_likes: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_likes_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      videos: {
+        Row: {
+          comments_count: number | null
+          created_at: string
+          description: string | null
+          duration_seconds: number | null
+          hashtags: string[] | null
+          id: string
+          is_public: boolean | null
+          likes_count: number | null
+          shares_count: number | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          video_url: string
+          views_count: number | null
+        }
+        Insert: {
+          comments_count?: number | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          hashtags?: string[] | null
+          id?: string
+          is_public?: boolean | null
+          likes_count?: number | null
+          shares_count?: number | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          video_url: string
+          views_count?: number | null
+        }
+        Update: {
+          comments_count?: number | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          hashtags?: string[] | null
+          id?: string
+          is_public?: boolean | null
+          likes_count?: number | null
+          shares_count?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          video_url?: string
+          views_count?: number | null
+        }
+        Relationships: []
       }
     }
     Views: {
