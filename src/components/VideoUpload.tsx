@@ -88,10 +88,13 @@ export const VideoUpload = ({ onUploadComplete }: VideoUploadProps) => {
       const fileExt = selectedFile.name.split('.').pop();
       const fileName = `${user.id}/${Date.now()}.${fileExt}`;
 
-      // Upload video to storage
+      // Upload video to storage with proper content type
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('videos')
-        .upload(fileName, selectedFile);
+        .upload(fileName, selectedFile, {
+          contentType: selectedFile.type,
+          upsert: false
+        });
 
       if (uploadError) throw uploadError;
 
