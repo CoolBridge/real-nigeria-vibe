@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { VideoFeed } from '@/components/VideoFeed';
 import { VideoUpload } from '@/components/VideoUpload';
+import { ProfileManager } from '@/components/ProfileManager';
 import { BottomNavigation } from '@/components/BottomNavigation';
 import { Header } from '@/components/Header';
 import { useAuth } from '@/hooks/useAuth';
@@ -68,12 +69,15 @@ const Index = () => {
         );
       case 'profile':
         return (
-          <div className="h-screen pt-16 pb-16 flex items-center justify-center">
-            <div className="text-center animate-float-up">
-              <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-nigerian-green to-ureal-gold bg-clip-text text-transparent">
-                Your Profile
-              </h2>
-              <p className="text-muted-foreground">Showcase your unique Nigerian creativity 🌟</p>
+          <div className="h-screen pt-16 pb-16 bg-background overflow-y-auto">
+            <div className="container mx-auto px-4 py-8">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-nigerian-green to-ureal-gold bg-clip-text text-transparent">
+                  Your Profile
+                </h2>
+                <p className="text-muted-foreground">Showcase your unique Nigerian creativity 🌟</p>
+              </div>
+              {user && <ProfileManager />}
             </div>
           </div>
         );

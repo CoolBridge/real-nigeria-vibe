@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      answer_choices: {
+        Row: {
+          choice_order: number
+          choice_text: string
+          created_at: string
+          explanation: string | null
+          id: string
+          leadership_trait: string | null
+          points: number
+          question_id: string
+        }
+        Insert: {
+          choice_order: number
+          choice_text: string
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          leadership_trait?: string | null
+          points: number
+          question_id: string
+        }
+        Update: {
+          choice_order?: number
+          choice_text?: string
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          leadership_trait?: string | null
+          points?: number
+          question_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answer_choices_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assignments: {
         Row: {
           assigned_by: string | null
@@ -206,6 +247,139 @@ export type Database = {
         }
         Relationships: []
       }
+      forum_categories: {
+        Row: {
+          category_type: string
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          name: string
+          posts_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          category_type?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          name: string
+          posts_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category_type?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          name?: string
+          posts_count?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      forum_posts: {
+        Row: {
+          category_id: string
+          content: string
+          created_at: string
+          id: string
+          is_locked: boolean | null
+          is_pinned: boolean | null
+          last_reply_at: string | null
+          last_reply_by: string | null
+          replies_count: number | null
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number | null
+        }
+        Insert: {
+          category_id: string
+          content: string
+          created_at?: string
+          id?: string
+          is_locked?: boolean | null
+          is_pinned?: boolean | null
+          last_reply_at?: string | null
+          last_reply_by?: string | null
+          replies_count?: number | null
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number | null
+        }
+        Update: {
+          category_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_locked?: boolean | null
+          is_pinned?: boolean | null
+          last_reply_at?: string | null
+          last_reply_by?: string | null
+          replies_count?: number | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_posts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "forum_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_replies: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_solution: boolean | null
+          post_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_solution?: boolean | null
+          post_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_solution?: boolean | null
+          post_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "forum_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       incidents: {
         Row: {
           anonymous_id: string
@@ -373,6 +547,41 @@ export type Database = {
         }
         Relationships: []
       }
+      questions: {
+        Row: {
+          created_at: string
+          difficulty_weight: number
+          id: string
+          question_order: number
+          question_text: string
+          scenario_id: string
+        }
+        Insert: {
+          created_at?: string
+          difficulty_weight: number
+          id?: string
+          question_order: number
+          question_text: string
+          scenario_id: string
+        }
+        Update: {
+          created_at?: string
+          difficulty_weight?: number
+          id?: string
+          question_order?: number
+          question_text?: string
+          scenario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quiz_questions: {
         Row: {
           correct_answer: number
@@ -413,6 +622,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      scenarios: {
+        Row: {
+          category: string
+          context: string
+          created_at: string
+          description: string
+          difficulty_level: number
+          id: string
+          title: string
+        }
+        Insert: {
+          category: string
+          context: string
+          created_at?: string
+          description: string
+          difficulty_level: number
+          id?: string
+          title: string
+        }
+        Update: {
+          category?: string
+          context?: string
+          created_at?: string
+          description?: string
+          difficulty_level?: number
+          id?: string
+          title?: string
+        }
+        Relationships: []
       }
       training_categories: {
         Row: {
@@ -501,6 +740,95 @@ export type Database = {
           },
         ]
       }
+      user_activities: {
+        Row: {
+          activity_details: Json | null
+          activity_type: string
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          ip_address: unknown | null
+          page_url: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          activity_details?: Json | null
+          activity_type: string
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          activity_details?: Json | null
+          activity_type?: string
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_assessments: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          current_question: number | null
+          difficulty_level: number | null
+          id: string
+          scenario_id: string
+          started_at: string
+          status: string
+          total_score: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          current_question?: number | null
+          difficulty_level?: number | null
+          id?: string
+          scenario_id: string
+          started_at?: string
+          status?: string
+          total_score?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          current_question?: number | null
+          difficulty_level?: number | null
+          id?: string
+          scenario_id?: string
+          started_at?: string
+          status?: string
+          total_score?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_assessments_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_badges: {
         Row: {
           badge_id: string
@@ -565,6 +893,107 @@ export type Database = {
           },
         ]
       }
+      user_engagement_metrics: {
+        Row: {
+          assessments_completed: number | null
+          average_session_duration: number | null
+          created_at: string
+          engagement_score: number | null
+          id: string
+          metric_date: string
+          pages_visited: number | null
+          podcasts_listened: number | null
+          questions_answered: number | null
+          total_sessions: number | null
+          total_time_minutes: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assessments_completed?: number | null
+          average_session_duration?: number | null
+          created_at?: string
+          engagement_score?: number | null
+          id?: string
+          metric_date?: string
+          pages_visited?: number | null
+          podcasts_listened?: number | null
+          questions_answered?: number | null
+          total_sessions?: number | null
+          total_time_minutes?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assessments_completed?: number | null
+          average_session_duration?: number | null
+          created_at?: string
+          engagement_score?: number | null
+          id?: string
+          metric_date?: string
+          pages_visited?: number | null
+          podcasts_listened?: number | null
+          questions_answered?: number | null
+          total_sessions?: number | null
+          total_time_minutes?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_learning_progress: {
+        Row: {
+          attempts_count: number | null
+          best_score: number | null
+          completion_percentage: number | null
+          created_at: string
+          id: string
+          improvement_areas: string[] | null
+          last_activity: string | null
+          scenario_id: string | null
+          strengths: string[] | null
+          time_spent_minutes: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts_count?: number | null
+          best_score?: number | null
+          completion_percentage?: number | null
+          created_at?: string
+          id?: string
+          improvement_areas?: string[] | null
+          last_activity?: string | null
+          scenario_id?: string | null
+          strengths?: string[] | null
+          time_spent_minutes?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts_count?: number | null
+          best_score?: number | null
+          completion_percentage?: number | null
+          created_at?: string
+          id?: string
+          improvement_areas?: string[] | null
+          last_activity?: string | null
+          scenario_id?: string | null
+          strengths?: string[] | null
+          time_spent_minutes?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_learning_progress_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_progress: {
         Row: {
           completed_at: string | null
@@ -622,6 +1051,109 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
         ]
+      }
+      user_responses: {
+        Row: {
+          answer_choice_id: string
+          assessment_id: string
+          created_at: string
+          id: string
+          points_earned: number
+          question_id: string
+          response_time_seconds: number | null
+        }
+        Insert: {
+          answer_choice_id: string
+          assessment_id: string
+          created_at?: string
+          id?: string
+          points_earned: number
+          question_id: string
+          response_time_seconds?: number | null
+        }
+        Update: {
+          answer_choice_id?: string
+          assessment_id?: string
+          created_at?: string
+          id?: string
+          points_earned?: number
+          question_id?: string
+          response_time_seconds?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_responses_answer_choice_id_fkey"
+            columns: ["answer_choice_id"]
+            isOneToOne: false
+            referencedRelation: "answer_choices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_responses_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "user_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_responses_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_sessions: {
+        Row: {
+          activities_count: number | null
+          browser: string | null
+          created_at: string
+          device_type: string | null
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          location: string | null
+          os: string | null
+          pages_visited: number | null
+          session_id: string
+          started_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activities_count?: number | null
+          browser?: string | null
+          created_at?: string
+          device_type?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          location?: string | null
+          os?: string | null
+          pages_visited?: number | null
+          session_id: string
+          started_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activities_count?: number | null
+          browser?: string | null
+          created_at?: string
+          device_type?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          location?: string | null
+          os?: string | null
+          pages_visited?: number | null
+          session_id?: string
+          started_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       video_likes: {
         Row: {
